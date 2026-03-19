@@ -1,50 +1,39 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Todo App Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Component-Based Architecture
+The application follows a monorepo structure with clear separation between frontend (React) and backend (Express.js). Each component, service, and module has a single responsibility. UI components are reusable and self-contained. The frontend communicates with the backend exclusively through a defined REST API layer.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Test-First Development
+Testing is integral to the development workflow. Target 80%+ code coverage across all packages. Write tests that verify behavior, not implementation details. Follow the Arrange-Act-Assert pattern. Use Jest with React Testing Library for frontend tests and supertest for backend tests. Tests must pass before any code is merged.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Code Quality and Simplicity
+Follow DRY, KISS, and SOLID principles. Extract common code into shared utilities. Prefer simple, readable implementations over clever ones. Use camelCase for variables/functions, PascalCase for components/classes, and UPPER_SNAKE_CASE for constants. No unused variables, no console.log in production code, and meaningful error handling throughout.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Consistent Design System
+Follow the Material Design-inspired Halloween theme with an 8px grid spacing system. Support both light and dark modes using CSS custom properties. Use the defined color palette (orange primary, purple accent) consistently. All interactive elements must be keyboard accessible and meet WCAG AA contrast standards.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. API-Driven Data Flow
+The backend provides a RESTful API with full CRUD operations backed by SQLite. The frontend consumes this API through a dedicated service layer (todoService). All data modifications flow through the API — no direct database access from the frontend. Error states are handled gracefully with user-facing feedback.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technology Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **Frontend**: React with functional components and hooks, CSS for styling (no CSS-in-JS), Jest + React Testing Library + MSW for testing
+- **Backend**: Node.js with Express.js, SQLite (better-sqlite3) for persistence, Jest + supertest for testing
+- **Tooling**: npm workspaces for monorepo management, ESLint for linting, 2-space indentation, LF line endings
+- **Dependencies**: Minimize external dependencies; use built-in browser/Node APIs where possible
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Use feature branches for all new work (e.g., `feature/`, `001-`)
+- Write atomic commits with clear messages explaining the "why"
+- All code must pass linting and tests before merging
+- Use pull requests for code review
+- Follow the established file organization: components in `components/`, services in `services/`, tests colocated in `__tests__/` directories
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution defines the foundational principles for all development on the Todo App. All contributions must comply with these principles. Changes to the constitution require team discussion and documented rationale.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-19
