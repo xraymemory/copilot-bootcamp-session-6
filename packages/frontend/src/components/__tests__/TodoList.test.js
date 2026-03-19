@@ -59,4 +59,35 @@ describe('TodoList Component', () => {
     expect(screen.getAllByLabelText(/Edit/)).toHaveLength(2);
     expect(screen.getAllByLabelText(/Delete/)).toHaveLength(2);
   });
+
+  it('should mark overdue todos with overdue class', () => {
+    // Create a todo with a past due date (overdue) and one with future date
+    const pastDate = '2020-01-01';
+    const futureDate = '2099-12-31';
+    const todosWithDates = [
+      { id: 1, title: 'Overdue Todo', dueDate: pastDate, completed: 0, createdAt: '2025-11-01T00:00:00Z' },
+      { id: 2, title: 'Future Todo', dueDate: futureDate, completed: 0, createdAt: '2025-11-02T00:00:00Z' }
+    ];
+    
+    const { container } = render(
+      <TodoList todos={todosWithDates} {...mockHandlers} isLoading={false} />
+    );
+    
+    const cards = container.querySelectorAll('.todo-card');
+    expect(cards[0]).toHaveClass('overdue');
+    expect(cards[1]).not.toHaveClass('overdue');
+  });
+
+  it('should not mark completed todos as overdue even with past due date', () => {
+    const todosCompleted = [
+      { id: 1, title: 'Completed Overdue', dueDate: '2020-01-01', completed: 1, createdAt: '2025-11-01T00:00:00Z' }
+    ];
+    
+    const { container } = render(
+      <TodoList todos={todosCompleted} {...mockHandlers} isLoading={false} />
+    );
+    
+    const card = container.querySelector('.todo-card');
+    expect(card).not.toHaveClass('overdue');
+  });
 });

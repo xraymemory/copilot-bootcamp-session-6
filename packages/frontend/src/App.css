@@ -420,6 +420,28 @@ p {
   gap: var(--space-md);
 }
 
+/* Overdue Todo Styles */
+.todo-card.overdue {
+  border-color: var(--danger-color);
+  border-width: 2px;
+}
+
+.overdue-text {
+  color: var(--danger-color) !important;
+}
+
+.overdue-badge {
+  color: var(--danger-color);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.overdue-count {
+  color: #ffcccc;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .edit-form {
   width: 100%;
 }

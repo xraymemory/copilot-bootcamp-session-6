@@ -112,6 +112,17 @@ function App() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  // Compute overdue count for header display
+  const overdueCount = todos.filter(todo => {
+    if (!todo.dueDate || todo.completed === 1 || todo.completed === true) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(todo.dueDate + 'T00:00:00');
+    return dueDate < today;
+  }).length;
+
   return (
     <div className="app">
       <header className="app-header">
@@ -120,6 +131,9 @@ function App() {
             <span className="app-icon">🎃</span>
             My Todos
           </h1>
+          {overdueCount > 0 && (
+            <span className="overdue-count">{overdueCount} overdue</span>
+          )}
           <ThemeToggle theme={theme} onToggle={handleToggleTheme} />
         </div>
       </header>

@@ -232,4 +232,46 @@ describe('App Component', () => {
     fireEvent.click(themToggleAfter);
     expect(localStorage.getItem('todoAppTheme')).toBe('light');
   });
+
+  test('displays overdue count when there are overdue todos', async () => {
+    const pastDate = '2020-01-01';
+    server.use(
+      rest.get('/api/todos', (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.json([
+            { id: 1, title: 'Overdue Task', dueDate: pastDate, completed: 0, createdAt: '2025-11-01T00:00:00Z' },
+            { id: 2, title: 'Future Task', dueDate: '2099-12-31', completed: 0, createdAt: '2025-11-02T00:00:00Z' }
+          ])
+        );
+      })
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText('1 overdue')).toBeInTheDocument();
+    });
+  });
+
+  test('does not display overdue count when no todos are overdue', async () => {
+    server.use(
+      rest.get('/api/todos', (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.json([
+            { id: 1, title: 'Future Task', dueDate: '2099-12-31', completed: 0, createdAt: '2025-11-01T00:00:00Z' }
+          ])
+        );
+      })
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Future Task')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText(/overdue/)).not.toBeInTheDocument();
+  });
 });

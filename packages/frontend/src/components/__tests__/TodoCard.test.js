@@ -99,4 +99,42 @@ describe('TodoCard Component', () => {
     
     expect(screen.queryByText(/Due:/)).not.toBeInTheDocument();
   });
+
+  it('should apply overdue class and show Overdue badge when isOverdue is true', () => {
+    const { container } = render(
+      <TodoCard todo={mockTodo} {...mockHandlers} isLoading={false} isOverdue={true} />
+    );
+    
+    const card = container.querySelector('.todo-card');
+    expect(card).toHaveClass('overdue');
+    expect(screen.getByText('Overdue')).toBeInTheDocument();
+  });
+
+  it('should not apply overdue class when isOverdue is false', () => {
+    const { container } = render(
+      <TodoCard todo={mockTodo} {...mockHandlers} isLoading={false} isOverdue={false} />
+    );
+    
+    const card = container.querySelector('.todo-card');
+    expect(card).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  it('should not show overdue indicator when todo has no due date', () => {
+    const todoNoDate = { ...mockTodo, dueDate: null };
+    render(<TodoCard todo={todoNoDate} {...mockHandlers} isLoading={false} isOverdue={false} />);
+    
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  it('should not show overdue indicator for completed todo even with isOverdue prop', () => {
+    const completedTodo = { ...mockTodo, completed: 1 };
+    const { container } = render(
+      <TodoCard todo={completedTodo} {...mockHandlers} isLoading={false} isOverdue={false} />
+    );
+    
+    const card = container.querySelector('.todo-card');
+    expect(card).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
 });
