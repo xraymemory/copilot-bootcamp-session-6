@@ -88,3 +88,35 @@ As a user, I want to see a count of overdue todos in the app header area so that
 - **SC-003**: 0% of completed todos or todos without due dates display the overdue indicator.
 - **SC-004**: All existing tests continue to pass after implementation (no regressions).
 - **SC-005**: New tests cover overdue indicator rendering for overdue, non-overdue, completed, and no-due-date scenarios.
+
+## Clarifications
+
+The following clarifications were identified during spec review and have been resolved:
+
+### C1: What constitutes "overdue"?
+**Question**: Should a todo due today be considered overdue?  
+**Resolution**: No. A todo is only overdue if its due date is strictly before today (i.e., `dueDate < today`). A todo due today is still "on time." This uses date-only comparison, ignoring time of day.
+
+### C2: How should overdue be determined across timezones?
+**Question**: Should overdue comparison use UTC or local time?  
+**Resolution**: Use the browser's local date (`new Date()` with date-only comparison). Since this is a single-user app, the user's local timezone is the correct reference. No server-side overdue computation is needed.
+
+### C3: What visual indicator should be used for overdue?
+**Question**: Should it be a badge, border color, text color, icon, or combination?  
+**Resolution**: Use a combination approach consistent with the existing design system:
+- Add a CSS class `overdue` to the TodoCard container for overdue items
+- Display the due date text in the danger color (red from theme)
+- Add a small "Overdue" text label next to the due date
+- This approach uses existing theme colors and does not require new icons or assets
+
+### C4: Should the backend be modified?
+**Question**: Does the backend need an `isOverdue` field or endpoint?  
+**Resolution**: No. Overdue is a purely frontend-computed derived state. The backend already provides `dueDate` and `completed` fields, which is sufficient. No backend changes are needed.
+
+### C5: Should overdue indicators update in real-time at midnight?
+**Question**: If a user leaves the app open past midnight, should indicators update automatically?  
+**Resolution**: No. Indicators are computed on render. They will update on the next user interaction that triggers a re-render (e.g., adding a todo, toggling completion, refreshing the page). Real-time polling or timers are out of scope.
+
+### C6: Where does the overdue count appear in the App?
+**Question**: What exactly should the overdue summary in the header look like?  
+**Resolution**: Display a simple text like "X overdue" near the app title in a danger/red color. Only show it when there is at least one overdue todo. This is handled in App.js alongside the existing header elements.
